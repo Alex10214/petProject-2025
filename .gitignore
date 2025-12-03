@@ -1,7 +1,24 @@
+# Visual Studio
 .vs/
-bin/
-obj/
 *.user
 *.suo
+
+# Build output
+bin/
+obj/
+
+# SQLite local databases
+*.db
 *.db-shm
 *.db-wal
+
+# ASP.NET Core logs and cache
+logs/
+*.log
+
+# IIS Express
+iisexpress/
+*.applicationhost.config
+
+# System
+Thumbs.db
