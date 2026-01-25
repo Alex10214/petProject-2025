@@ -1,6 +1,7 @@
-import {Component, inject, input, output, signal} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {IRegisterCred, IUser} from '../../../interfaces/user';
+
+import {IRegisterCred} from '../../../interfaces/user';
 import {AccountService} from '../../../core/services/account-service';
 
 @Component({
