@@ -1,13 +1,13 @@
 import {inject, Injectable} from '@angular/core';
-import {AccountService} from './account-service';
 import {Observable, of} from 'rxjs';
+
+import {AccountService} from './account-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InitService {
   private accountService = inject(AccountService);
-
   constructor() {
 
   }
@@ -20,7 +20,6 @@ export class InitService {
     const user = JSON.parse(userString);
     this.accountService.currentUser.set(user);
     return of(null);
-
   }
 
 }
