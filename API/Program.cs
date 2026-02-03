@@ -16,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     var token = builder.Configuration["TokenKey"] ?? throw new Exception("Token key not found 'Program.cs'");
@@ -37,6 +40,22 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(context);  
+}
+catch(Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during migration");
+}
 
 app.Run();
  

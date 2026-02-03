@@ -9,8 +9,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    // Summary: AccountController class for user registration and login
     public class AccountController(AppDbContext context, ITokenService tokenService) : BaseApiController
     {
+        /// <summary>
+        /// Registers a new user account.
+        /// </summary>
+        /// <param name="registerDTO">User registration data.</param>
+        /// <returns>Created user data with JWT token.</returns>
         [HttpPost("register")] // /api/account/register
         public async Task<ActionResult<UserDTO>> RegisterAccount(RegisterDTO registerDTO)
         {
@@ -33,6 +39,11 @@ namespace API.Controllers
             return user.ToDto(tokenService);
         }
 
+        /// <summary>
+        /// Authenticates user and returns JWT token.
+        /// </summary>
+        /// <param name="loginDTO">User credentials.</param>
+        /// <returns>User data with JWT token.</returns>
         [HttpPost("login")] // /api/account/login
         public async Task<ActionResult<UserDTO>> Login([FromBody]LoginDTO loginDTO)
         {

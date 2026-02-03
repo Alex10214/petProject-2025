@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126212636_AddedMemberEntity")]
+    partial class AddedMemberEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -23,8 +26,10 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("MemberID")
-                        .IsRequired()
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MemberId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
@@ -33,7 +38,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MemberID");
+                    b.HasIndex("MemberId");
 
                     b.ToTable("Image");
                 });
@@ -107,10 +112,8 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Image", b =>
                 {
                     b.HasOne("API.Entities.Member", "Member")
-                        .WithMany("Images")
-                        .HasForeignKey("MemberID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("MemberId");
 
                     b.Navigation("Member");
                 });
@@ -124,11 +127,6 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("API.Entities.Member", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("API.Entities.User", b =>
