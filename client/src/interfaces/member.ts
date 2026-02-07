@@ -9,3 +9,12 @@ export interface IMember {
   lastActive: string
   description?: string
 }
+
+export interface IEditMember {
+  birthDate: string
+  imageUrl?: string
+  displayName: string
+  country: string
+  city: string
+  description?: string
+}

@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.DTO;
+using API.Entities;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +44,7 @@ namespace API.Data
         /// <returns>True if at least one change was saved.</returns>
         public async Task<bool> SaveAllAsync()
         {
-           return await context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
 
         /// <summary>
@@ -54,5 +55,13 @@ namespace API.Data
         {
             context.Entry(member).State = EntityState.Modified;
         }
+
+        public async Task<Member?> GetMemberForUpdates(string id)
+{
+    return await context.Members
+        .Include(m => m.User)
+        .Include(m => m.Images)
+        .FirstOrDefaultAsync(m => m.Id == id);
+}
     }
 }

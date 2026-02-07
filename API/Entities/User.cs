@@ -10,7 +10,6 @@ namespace API.Entities
         public required byte[] PasswordHash { get; set; }
         public required byte[] PasswordSalt { get; set; }
         public string? ImageUrl { get; set; }
-
         public Member Member { get; set; } = null!;
     }
 }

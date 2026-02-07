@@ -1,32 +1,72 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {filter} from 'rxjs';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {IMember} from '../../../interfaces/member';
+import {Component, inject, OnDestroy, OnInit, signal, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
+
+import {IEditMember, IMember} from '../../../interfaces/member';
+import {MemberService} from '../../../core/services/member-service';
+import {FormsModule, NgForm} from '@angular/forms';
+import {ToastService} from '../../../core/services/toast-service';
+import {AccountService} from '../../../core/services/account-service';
 
 @Component({
   selector: 'app-member-profile',
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   templateUrl: './member-profile.html',
   styleUrl: './member-profile.css',
 })
-export class MemberProfile implements OnInit {
-  private route = inject(ActivatedRoute);
-  protected member= signal<IMember | undefined>(undefined);
-  private router = inject(Router);
+export class MemberProfile implements OnInit, OnDestroy {
+  @ViewChild('editForm') editForm?: NgForm
+  protected memberService = inject(MemberService);
+  private accountService = inject(AccountService);
+  private toastService = inject(ToastService);
   protected title = signal<string | undefined>("Profile");
+  protected editableMember: IEditMember = {
+    birthDate: "",
+    imageUrl: "",
+    displayName: "",
+    country: "",
+    city: "",
+    description: ""
+  };
 
   ngOnInit() {
-    this.route.parent?.data.subscribe(data =>{
-      this.member.set(data['member'])
-    })
-
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe({
-      next: () => {
-        this.title.set(this.route.firstChild?.snapshot.title);
+      this.editableMember = {
+        birthDate: this.memberService.member()?.birthDate || "",
+        imageUrl: this.memberService.member()?.imageUrl || "",
+        displayName: this.memberService.member()?.displayName || "",
+        country: this.memberService.member()?.country || "",
+        city: this.memberService.member()?.city || "",
+        description: this.memberService.member()?.description || ""
       }
-    })
+  }
+
+  updateProfile() {
+    if (!this.memberService.member()) {
+      return;
+    }
+
+    console.log(this.editableMember)
+
+    const updatedMember = {...this.memberService.member(), ...this.editableMember};
+    this.memberService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        const currentUser = this.accountService.currentUser();
+
+        if (currentUser && updatedMember.displayName !== currentUser.displayName) {
+          currentUser.displayName = updatedMember.displayName;
+          this.accountService.setCurrentUser(currentUser);
+        }
+
+        this.toastService.success("Profile updated successfully");
+        this.memberService.member.set(updatedMember as IMember)
+        this.memberService.editMode.set(false);
+        this.editForm?.reset(updatedMember);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.memberService.editMode()) {
+      this.memberService.editMode.set(false);
+    }
   }
 }
