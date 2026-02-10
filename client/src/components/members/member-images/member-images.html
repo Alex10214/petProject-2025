@@ -1,12 +1,19 @@
-  @if (images$ | async; as images) {
+@if(!memberService.editMode()) {
+  @if (images(); as images) {
     @if (images.length > 0) {
       <div class="grid grid-cols-4 auto-rows-min gap-3 p-5 h-full overflow-auto">
         @for (image of images; track image.id) {
-          <img src="/555.png" alt="photo of member" class="rounded-lg">
-        }
-        @for (image of imagesArray; track $index) {
-          <img src="/555.png" alt="photo of member" class="rounded-lg">
+          <div class="relative">
+            <img src="{{image.url}}" alt="photo of member" class="rounded-lg">
+            <app-delete-btn class="absolute top-1 right-1 z-10"></app-delete-btn>
+          </div>
         }
       </div>
+    } @else {
+      <div class="flex justify-center items-center h-full">No images</div>
     }
   }
+} @else {
+  <app-upload-images (uploadFile)="onUploadImage($event)"></app-upload-images>
+}
+

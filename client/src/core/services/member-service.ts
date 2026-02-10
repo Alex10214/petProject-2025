@@ -1,17 +1,16 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
+import {tap} from 'rxjs';
+
 import {environment} from '../../environments/environment';
 import {IEditMember, IMember} from '../../interfaces/member';
-import { AccountService } from "./account-service";
 import {IImage} from '../../interfaces/image';
-import {tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemberService {
   private http = inject(HttpClient);
-  private accountService = inject(AccountService);
   public editMode = signal(false);
   member = signal<IMember | null>(null);
 
@@ -33,5 +32,19 @@ export class MemberService {
 
   updateMember(member: IEditMember) {
     return this.http.put<IMember>(this.baseUrl + `members`, member);
+  }
+
+  uploadImage(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<IImage>(
+      this.baseUrl + 'members/upload-image',
+      formData
+    );
+  }
+
+  deleteImage(id: number) {
+    return this.http.delete(this.baseUrl + `members/delete-image/${id}`);
   }
 }
