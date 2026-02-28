@@ -5,7 +5,10 @@
         @for (image of images; track image.id) {
           <div class="relative">
             <img src="{{image.url}}" alt="photo of member" class="rounded-lg">
-            <app-delete-btn class="absolute top-1 right-1 z-10"></app-delete-btn>
+            @if (accountService.currentUser()?.id === memberService.member()?.id) {
+              <app-set-main-img-btn class="absolute top-1 left-1 z-10" (click)="setMainImage(image)"></app-set-main-img-btn>
+              <app-delete-btn class="absolute top-1 right-1 z-10" (click)="deleteImage(image.id)"></app-delete-btn>
+            }
           </div>
         }
       </div>

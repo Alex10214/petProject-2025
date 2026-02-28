@@ -6,17 +6,17 @@ import {IImage} from '../../../interfaces/image';
 import {UploadImages} from '../../../utils/upload-images/upload-images';
 import {DeleteBtn} from '../../../utils/delete-btn/delete-btn';
 import {AccountService} from '../../../core/services/account-service';
-import {IEditMember} from '../../../interfaces/member';
+import {SetMainImgBtn} from '../../../utils/set-main-img-btn/set-main-img-btn';
 
 @Component({
   selector: 'app-member-images',
-  imports: [UploadImages, DeleteBtn],
+  imports: [UploadImages, DeleteBtn, SetMainImgBtn],
   templateUrl: './member-images.html',
   styleUrl: './member-images.css',
 })
 export class MemberImages implements OnInit{
   protected memberService = inject(MemberService);
-  private accountService = inject(AccountService);
+  protected accountService = inject(AccountService);
   private route = inject(ActivatedRoute);
   protected images = signal<IImage[]>([]);
 
@@ -42,26 +42,27 @@ export class MemberImages implements OnInit{
     })
   }
 
-  setMainImage(image: IImage) {
-    this.memberService.setMainImage(image).subscribe({
+  setMainImage(photo: IImage) {
+    this.memberService.setMainImage(photo).subscribe({
       next: () => {
-        const currentUser = this.accountService.currentUser();
-        const currentMember = this.memberService.member();
+        setTimeout(() => this.setImage(photo));
+      }
+    })
+  }
 
-        if (currentUser) {
-          currentUser.imageUrl = image.url;
-          this.accountService.setCurrentUser(currentUser);
-        }
+  private setImage(photo: IImage) {
+    const currentUser = this.accountService.currentUser();
+    if (currentUser) {
+      this.accountService.setCurrentUser({
+        ...currentUser,
+        imageUrl: photo.url
+      });
+    }
 
-        if (currentMember) {
-          this.memberService.updateMember({
-            ...currentMember,
-            imageUrl: image.url
-          } as IEditMember);
-        }
-      },
-      error: error => {}
-    });
+    this.memberService.member.update(member => member ? {
+      ...member,
+      imageUrl: photo.url
+    } : null);
   }
 
   deleteImage(id: number) {

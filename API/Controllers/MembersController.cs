@@ -109,6 +109,26 @@ namespace API.Controllers
             }
         }
 
+        [HttpPut("set-main-image/{imageId}")]
+        public async Task<ActionResult> SetMainImage(int imageId)
+        {
+            var member = await memberRepository.GetMemberForUpdates(User.GetMemberId());
+
+            if (member == null) return BadRequest("Could not get member");
+
+            var image = member.Images.SingleOrDefault(i => i.Id == imageId);
+
+            if (member.ImageUrl == image?.Url || image == null) return BadRequest("Connot set image");
+
+            member.ImageUrl = image.Url;
+            member.User.ImageUrl = image.Url;
+
+            if (await memberRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Something went wrong");
+
+        }
+
         [HttpDelete("delete-image/{id}")]
         public async Task<ActionResult> DeleteImage(int id)
         {
@@ -133,26 +153,6 @@ namespace API.Controllers
             if (await memberRepository.SaveAllAsync()) return Ok();
 
             return BadRequest("Something went wrong");
-        }
-
-        [HttpPut("set-main-image/{imageId}")]
-        public async Task<ActionResult> SetMainImage(int imageId)
-        {
-            var member = await memberRepository.GetMemberForUpdates(User.GetMemberId());
-
-            if (member == null) return BadRequest("Could not get member");
-
-            var image = member.Images.SingleOrDefault(i => i.Id == imageId);
-
-            if (member.ImageUrl == image?.Url || image == null) return BadRequest("Connot set image");
-
-            member.ImageUrl = image.Url;
-            member.User.ImageUrl = image.Url;
-
-            if (await memberRepository.SaveAllAsync()) return NoContent();
-
-            return BadRequest("Something went wrong");
-
         }
     }
 }
