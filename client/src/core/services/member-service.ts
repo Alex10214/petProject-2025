@@ -44,6 +44,10 @@ export class MemberService {
     );
   }
 
+  setMainImage(image: IImage) {
+    return this.http.put(this.baseUrl + `members/set-main-image/${image.id}`, {});
+  }
+
   deleteImage(id: number) {
     return this.http.delete(this.baseUrl + `members/delete-image/${id}`);
   }

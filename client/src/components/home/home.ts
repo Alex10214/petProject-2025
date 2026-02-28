@@ -9,7 +9,7 @@ import {Register} from '../account/register/register';
   styleUrl: './home.css',
 })
 export class Home {
-  protected registerMode = signal<boolean>(false);
+  protected registerMode = signal<boolean>(true);
 
   showRegister(value: boolean) {
     this.registerMode.set(value);
