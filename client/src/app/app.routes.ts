@@ -3,7 +3,6 @@ import {authGuard} from '../core/guards/auth-guard';
 
 import {MemberList} from '../components/members/member-list/member-list';
 import {MemberDetails} from '../components/members/member-details/member-details';
-import {Lists} from '../components/lists/lists';
 import {Messages} from '../components/messages/messages';
 import {Home} from '../components/home/home';
 import {NotFound} from '../components/not-found/not-found';
@@ -31,7 +30,6 @@ export const routes: Routes = [
           { path: 'images', component: MemberImages, title: 'Images' },
         ]
       },
-      { path: 'lists', component: Lists },
       { path: 'messages', component: Messages},
     ]
   },

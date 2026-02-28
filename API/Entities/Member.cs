@@ -21,5 +21,11 @@ namespace API.Entities
         [JsonIgnore]
         [ForeignKey(nameof(Id))]
         public User User { get; set; } = null!;
+
+        [JsonIgnore]
+        public List<Message> MessagesSent { get; set; } = [];
+
+        [JsonIgnore]
+        public List<Message> MessagesReceived { get; set; } = [];
     }
 }

@@ -1,5 +1,5 @@
-<div class="flex gap-3">
+<div class="grid grid-cols-5 gap-3">
   @for(item of members$ | async; track $index) {
-     <app-member-card  class="card-wrapper mx-auto" [member]="item"></app-member-card>
+    <app-member-card class="mx-auto" [member]="item"></app-member-card>
   }
 </div>
