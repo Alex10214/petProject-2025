@@ -10,6 +10,7 @@ import {MemberProfile} from '../components/members/member-profile/member-profile
 import {MemberMessages} from '../components/members/member-messages/member-messages';
 import {MemberImages} from '../components/members/member-images/member-images';
 import {resolverResolver} from '../components/members/member-resolver/resolver-resolver';
+import {MessageThread} from '../components/message-thread/message-thread';
 
 export const routes: Routes = [
   { path: '', component: Home},
@@ -30,7 +31,9 @@ export const routes: Routes = [
           { path: 'images', component: MemberImages, title: 'Images' },
         ]
       },
-      { path: 'messages', component: Messages},
+      { path: 'messages', component: Messages },
+      { path: 'messages/:id', component: MessageThread },
+      { path: 'profile', component: MemberProfile },
     ]
   },
   { path: '**', component: NotFound},

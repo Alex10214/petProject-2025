@@ -13,6 +13,7 @@
 
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
       @if(accountService.currentUser()) {
+        <a [routerLink]="['/members', accountService.currentUser()?.id]" routerLinkActive="text-neutral">Profile</a>
         <a routerLink="/members" routerLinkActive="text-neutral" [routerLinkActiveOptions]="{exact: true}">Users</a>
         <a routerLink="/messages" routerLinkActive="text-neutral">Messages</a>
       }

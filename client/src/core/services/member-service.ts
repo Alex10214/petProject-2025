@@ -22,7 +22,10 @@ export class MemberService {
 
   getMember(id: string) {
     return this.http.get<IMember>(this.baseUrl + `members/${id}`).pipe(
-      tap(member => this.member.set(member))
+      tap(member => {
+        console.log("MEMBER => ", member)
+        this.member.set(member)
+      })
     );
   }
 

@@ -13,4 +13,13 @@ export class MessageService {
   getMessages() {
     return this.httpClient.get<IMessage[]>(this.baseUrl + 'message');
   }
+
+  getMessageThread(id: string) {
+    return this.httpClient.get<IMessage[]>(this.baseUrl + `message/thread/${id}`);
+  }
+
+  sendMessage(recipientId: string, content: string) {
+    // return this.httpClient.post<IMessage>(this.baseUrl + 'message', { recipientId, content });
+    return content;
+  }
 }
