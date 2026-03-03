@@ -13,34 +13,52 @@ export class AccountService {
  baseUrl = environment.apiUrl;
  currentUser = signal<IUser | null>(null)
 
-  register(creds: IRegisterCred) {
-    return this.http.post<IUser>(this.baseUrl + 'account/register', creds).pipe(
+  register(cred: IRegisterCred) {
+    return this.http.post<IUser>(this.baseUrl + 'account/register', cred, {withCredentials: true}).pipe(
       tap(user => {
         if (user) {
           this.setCurrentUser(user)
+          this.refreshTokenInterval()
         }
       })
     )
   };
 
  login(cred: ILoginCred) {
-   return this.http.post<IUser>(this.baseUrl + 'account/login', cred).pipe(
+   return this.http.post<IUser>(this.baseUrl + 'account/login', cred, {withCredentials: true}).pipe(
      tap(user => {
        if (user) {
          this.setCurrentUser(user)
+         this.refreshTokenInterval()
        }
      })
    )
  };
 
+  setCurrentUser(user: IUser) {
+    this.currentUser.set(user);
+  };
+
+  refreshToken() {
+    return this.http.post<IUser>(this.baseUrl + 'account/refresh-token', {}, {withCredentials: true});
+  }
+
+  refreshTokenInterval() {
+    setInterval(() => {
+      this.http.post<IUser>(this.baseUrl + 'account/refresh-token', {}, {withCredentials: true}).subscribe({
+        next: user => {
+          if (user) {
+            this.setCurrentUser(user)
+          }
+        },
+        error: () => {
+          this.logout()
+        }
+      });
+    }, 1000 * 60 * 5)
+  }
+
  logout() {
-   localStorage.removeItem("user");
     this.currentUser.set(null);
  };
-
- setCurrentUser(user: IUser) {
-   localStorage.setItem("user", JSON.stringify(user));
-   this.currentUser.set(user);
- };
-
 }

@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {tap} from 'rxjs';
 
 import {AccountService} from './account-service';
 
@@ -12,14 +12,16 @@ export class InitService {
 
   }
 
-  init(): Observable<null> {
-    const userString = localStorage.getItem('user');
-
-    if (!userString) return of (null);
-
-    const user = JSON.parse(userString);
-    this.accountService.currentUser.set(user);
-    return of(null);
+  init() {
+    return this.accountService.refreshToken().pipe(
+      tap(user => {
+        console.log("USER1 => ", user)
+        if (user) {
+          console.log("USER2 => ", user)
+          this.accountService.currentUser.set(user);
+          this.accountService.refreshTokenInterval();
+        }
+      })
+    )
   }
-
 }

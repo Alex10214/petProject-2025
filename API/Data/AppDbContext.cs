@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using API.Entities;
+﻿using API.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -9,9 +9,8 @@ namespace API.Data
     /// Entity Framework Core database context used to access and manage application data.
     /// Defines database tables and handles connections, queries, and persistence.
     /// </summary>
-    public class AppDbContext(DbContextOptions options) : DbContext(options)
+    public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(options)
     {
-        public DbSet<User> Users { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<Message> Messages { get; set; }

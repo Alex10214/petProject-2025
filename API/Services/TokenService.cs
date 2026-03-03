@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using API.Entities;
 using API.Interfaces;
@@ -21,7 +22,7 @@ namespace API.Services
             
             var claims = new List<Claim>
             {
-                new (ClaimTypes.Email, user.Email),
+                new (ClaimTypes.Email, user.Email!),
                 new (ClaimTypes.NameIdentifier, user.Id)
             };
 
@@ -33,7 +34,7 @@ namespace API.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(55),
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 SigningCredentials = creds
             };
 
@@ -42,6 +43,12 @@ namespace API.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public string GenerateRefreshToken()
+        {
+           var randomBytes = RandomNumberGenerator.GetBytes(64);
+            return Convert.ToBase64String(randomBytes);
         }
     }
 }

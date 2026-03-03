@@ -1,9 +1,11 @@
 using System.Text;
 using API.Data;
+using API.Entities;
 using API.Interfaces;
 using API.Services;
 using API.Utils.Cloudinary;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,6 +25,12 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
+builder.Services.AddIdentityCore<User>(opt => {
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.User.RequireUniqueEmail = true;
+}).AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     var token = builder.Configuration["TokenKey"] ?? throw new Exception("Token key not found 'Program.cs'");
@@ -37,7 +45,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 var app = builder.Build();
 app.UseMiddleware<API.MiddleWare.ExeptionMiddleWare>();
-app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod()
+app.UseCors(options => options
+.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowCredentials()
     .WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
 app.UseAuthentication();

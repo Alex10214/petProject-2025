@@ -22,7 +22,7 @@ namespace API.MiddleWare
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = env.IsDevelopment()
-                    ? new ApiExeptionType(ex.Message, context.Response.StatusCode,  ex.StackTrace)
+                    ? new ApiExeptionType(ex.Message, context.Response.StatusCode,  ex.StackTrace!)
                     : new ApiExeptionType(ex.Message, context.Response.StatusCode, "Internal server error");
 
                 var options = new JsonSerializerOptions

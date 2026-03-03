@@ -22,15 +22,18 @@ export const appConfig: ApplicationConfig = {
       const initService = inject(InitService)
 
       return new Promise<void>(async (resolve) => {
-        try {
-          await lastValueFrom(initService.init());
-        } finally {
-          const splash = document.getElementById('initial-splash');
-          if (splash) {
-            splash.remove();
+        setTimeout( async () => {
+          try {
+            await lastValueFrom(initService.init());
+          } finally {
+            const splash = document.getElementById('initial-splash');
+            if (splash) {
+              splash.remove();
+            }
+            resolve();
           }
-          resolve();
-        }
+        }, 500)
+
       })
     })
   ]

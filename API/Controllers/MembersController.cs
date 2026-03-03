@@ -142,7 +142,7 @@ namespace API.Controllers
 
             if (image.PublicID == null)
             {
-                var res = await imageService.DeleteImageAsync(image.PublicID);
+                var res = await imageService.DeleteImageAsync(image.PublicID!);
 
                 if (res.Error != null) return BadRequest("Something went wrong");
 

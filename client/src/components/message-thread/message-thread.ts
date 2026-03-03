@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 
 import {IMessage} from '../../interfaces/message';
@@ -9,7 +9,7 @@ import {AccountService} from '../../core/services/account-service';
 
 @Component({
   selector: 'app-message-thread',
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, RouterLink],
   templateUrl: './message-thread.html',
   styleUrl: './message-thread.css',
 })
