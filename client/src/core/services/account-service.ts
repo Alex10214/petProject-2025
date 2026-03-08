@@ -4,6 +4,8 @@ import {tap} from 'rxjs';
 
 import {ILoginCred, IRegisterCred, IUser} from '../../interfaces/user';
 import {environment} from '../../environments/environment';
+import {OnlineUserService} from './online-user-service';
+import {HubConnectionState} from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +13,9 @@ import {environment} from '../../environments/environment';
 export class AccountService {
  private http = inject(HttpClient);
  baseUrl = environment.apiUrl;
- currentUser = signal<IUser | null>(null)
+ currentUser = signal<IUser | null>(null);
+ private onlineUserService = inject(OnlineUserService);
+ private refreshIntervalId: ReturnType<typeof setInterval> | null = null;
 
   register(cred: IRegisterCred) {
     return this.http.post<IUser>(this.baseUrl + 'account/register', cred, {withCredentials: true}).pipe(
@@ -37,6 +41,9 @@ export class AccountService {
 
   setCurrentUser(user: IUser) {
     this.currentUser.set(user);
+    if (this.onlineUserService.hubConnection?.state !== HubConnectionState.Connected) {
+      this.onlineUserService.createHubConnection(user);
+    }
   };
 
   refreshToken() {
@@ -44,7 +51,8 @@ export class AccountService {
   }
 
   refreshTokenInterval() {
-    setInterval(() => {
+    if (this.refreshIntervalId) clearInterval(this.refreshIntervalId);
+    this.refreshIntervalId = setInterval(() => {
       this.http.post<IUser>(this.baseUrl + 'account/refresh-token', {}, {withCredentials: true}).subscribe({
         next: user => {
           if (user) {
@@ -59,6 +67,12 @@ export class AccountService {
   }
 
  logout() {
+    this.http.post(this.baseUrl + 'account/logout', {}, {withCredentials: true}).subscribe();
+    if (this.refreshIntervalId) {
+      clearInterval(this.refreshIntervalId);
+      this.refreshIntervalId = null;
+    }
+    this.onlineUserService.stopHubConnection();
     this.currentUser.set(null);
  };
 }

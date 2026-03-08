@@ -15,10 +15,8 @@ export class InitService {
   init() {
     return this.accountService.refreshToken().pipe(
       tap(user => {
-        console.log("USER1 => ", user)
         if (user) {
-          console.log("USER2 => ", user)
-          this.accountService.currentUser.set(user);
+          this.accountService.setCurrentUser(user);
           this.accountService.refreshTokenInterval();
         }
       })

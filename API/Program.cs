@@ -3,6 +3,7 @@ using API.Data;
 using API.Entities;
 using API.Interfaces;
 using API.Services;
+using API.SignalR;
 using API.Utils.Cloudinary;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,9 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<OnlineTracker>();
+
 builder.Services.AddIdentityCore<User>(opt => {
     opt.Password.RequireNonAlphanumeric = false;
     opt.User.RequireUniqueEmail = true;
@@ -41,6 +45,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuer = false,
         ValidateAudience = false
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
+
 });
 
 var app = builder.Build();
@@ -55,6 +77,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<OnlineUserHub>("/hubs/online");
 
 using var scope = app.Services.CreateScope();
 

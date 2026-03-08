@@ -69,6 +69,13 @@ namespace API.Controllers
             return user.ToDto(tokenService);
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("refreshToken");
+            return NoContent();
+        }
+
         [HttpPost("refresh-token")]
         public async Task<ActionResult<UserDTO>> RefreshToken()
         {
