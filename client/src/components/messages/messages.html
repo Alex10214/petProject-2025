@@ -16,7 +16,7 @@
         <div class="flex flex-col flex-1 min-w-0">
           <div class="flex justify-between items-center">
             <span class="text-white font-medium">{{message.senderDisplayName}}</span>
-            <span class="text-xs text-gray-400">{{message.messageSent}}</span>
+            <span class="text-xs text-gray-400">{{message.messageSent | date:'d MMM y, HH:mm'}}</span>
           </div>
           <p class="text-gray-400 text-sm truncate">{{message.content}}</p>
         </div>

@@ -1,4 +1,4 @@
-<header class="p-3 w-full fixed top-0 bg-gradient-to-r from-primary to-black">
+<header class="p-3 w-full fixed top-0 z-50 bg-gradient-to-r from-primary to-black">
   <div class="flex align-middle items-center px-10 mx-auto gap-6">
     <a
       routerLink="/"
@@ -33,7 +33,7 @@
 
             <span>{{user.displayName}}</span>
           </div>
-          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-sm">
+          <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-50 w-52 p-2 shadow-lg">
             <li><a routerLink="members/{{user.id}}">Edit profile</a></li>
             <li><a (click)="logout()">Logout</a></li>
           </ul>

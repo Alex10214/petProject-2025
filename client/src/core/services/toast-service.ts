@@ -13,7 +13,8 @@ export class ToastService {
     if (!document.querySelector('#toast-container')) {
       const container = document.createElement('div');
       container.id = 'toast-container';
-      container.className = 'toast toast-bottom toast-end'
+      container.className = 'toast toast-top toast-end'
+      container.style.marginTop = '80px'
       document.body.appendChild(container)
     }
   }

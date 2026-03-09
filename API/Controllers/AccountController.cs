@@ -97,7 +97,7 @@ namespace API.Controllers
         {
             var refreshToken = tokenService.GenerateRefreshToken();
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExp = DateTime.UtcNow.AddDays(7);
+            user.RefreshTokenExp = DateTime.UtcNow.AddDays(1);
             await userManager.UpdateAsync(user);
 
             var cookieOptions = new CookieOptions
@@ -105,7 +105,7 @@ namespace API.Controllers
                 HttpOnly = true,
                 Secure = false,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(1)
             };
 
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);

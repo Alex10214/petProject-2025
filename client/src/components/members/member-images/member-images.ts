@@ -7,10 +7,11 @@ import {UploadImages} from '../../../utils/upload-images/upload-images';
 import {DeleteBtn} from '../../../utils/delete-btn/delete-btn';
 import {AccountService} from '../../../core/services/account-service';
 import {SetMainImgBtn} from '../../../utils/set-main-img-btn/set-main-img-btn';
+import {ConfirmationModal} from '../../modals/confirmation-modal/confirmation-modal';
 
 @Component({
   selector: 'app-member-images',
-  imports: [UploadImages, DeleteBtn, SetMainImgBtn],
+  imports: [UploadImages, DeleteBtn, SetMainImgBtn, ConfirmationModal],
   templateUrl: './member-images.html',
   styleUrl: './member-images.css',
 })
@@ -19,6 +20,7 @@ export class MemberImages implements OnInit{
   protected accountService = inject(AccountService);
   private route = inject(ActivatedRoute);
   protected images = signal<IImage[]>([]);
+  protected pendingDeleteId = signal<number | null>(null);
 
   ngOnInit() {
     const memberId = this.route.parent?.snapshot.paramMap.get('id');
@@ -65,8 +67,16 @@ export class MemberImages implements OnInit{
     } : null);
   }
 
-  deleteImage(id: number) {
+  requestDelete(id: number) {
+    this.pendingDeleteId.set(id);
+  }
+
+  confirmDelete() {
+    const id = this.pendingDeleteId();
+    if (id === null) return;
+
     const deletedImage = this.images().find(photo => photo.id === id);
+    this.pendingDeleteId.set(null);
 
     this.memberService.deleteImage(id).subscribe({
       next: () => {
@@ -82,5 +92,9 @@ export class MemberImages implements OnInit{
         }
       }
     });
+  }
+
+  cancelDelete() {
+    this.pendingDeleteId.set(null);
   }
 }

@@ -1,3 +1,11 @@
+@if (pendingDeleteId() !== null) {
+  <app-confirmation-modal
+    message="Are you sure you want to delete this image?"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDelete()"
+  ></app-confirmation-modal>
+}
+
 @if(!memberService.editMode()) {
   @if (images(); as images) {
     @if (images.length > 0) {
@@ -7,7 +15,7 @@
             <img src="{{image.url}}" alt="photo of member" class="rounded-lg">
             @if (accountService.currentUser()?.id === memberService.member()?.id) {
               <app-set-main-img-btn class="absolute top-1 left-1 z-10" (click)="setMainImage(image)"></app-set-main-img-btn>
-              <app-delete-btn class="absolute top-1 right-1 z-10" (click)="deleteImage(image.id)"></app-delete-btn>
+              <app-delete-btn class="absolute top-1 right-1 z-10" (click)="requestDelete(image.id)"></app-delete-btn>
             }
           </div>
         }
