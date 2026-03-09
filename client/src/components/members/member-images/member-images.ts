@@ -66,9 +66,20 @@ export class MemberImages implements OnInit{
   }
 
   deleteImage(id: number) {
+    const deletedImage = this.images().find(photo => photo.id === id);
+
     this.memberService.deleteImage(id).subscribe({
       next: () => {
         this.images.update(photos => photos.filter(photo => photo.id !== id));
+
+        if (deletedImage?.url === this.memberService.member()?.imageUrl) {
+          this.memberService.member.update(member => member ? { ...member, imageUrl: undefined } : null);
+
+          const currentUser = this.accountService.currentUser();
+          if (currentUser) {
+            this.accountService.setCurrentUser({ ...currentUser, imageUrl: undefined });
+          }
+        }
       }
     });
   }

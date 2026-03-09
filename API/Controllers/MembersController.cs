@@ -150,6 +150,12 @@ namespace API.Controllers
 
             member.Images.Remove(image);
 
+            if (member.ImageUrl == image.Url)
+            {
+                member.ImageUrl = null;
+                member.User.ImageUrl = null;
+            }
+
             if (await memberRepository.SaveAllAsync()) return Ok();
 
             return BadRequest("Something went wrong");

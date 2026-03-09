@@ -13,11 +13,6 @@ import {MemberCard} from '../member-card/member-card';
 })
 export class MemberList {
 
-  constructor() {
-    this.members$ = this.memberService.getMembers();
-    console.log(this.members$.subscribe(el => console.log(el)));
-  }
-
   private memberService = inject(MemberService);
   protected members$: Observable<IMember[]> = this.memberService.getMembers();
 }
