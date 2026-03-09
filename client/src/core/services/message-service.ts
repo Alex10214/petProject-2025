@@ -36,7 +36,7 @@ export class MessageService {
     }).withAutomaticReconnect().build();
 
     this.hubConnection.start().catch(err => {
-      console.log(err);
+      console.error(err);
     })
 
     this.hubConnection.on('NewMessage', (message: IMessage) => {
@@ -53,7 +53,7 @@ export class MessageService {
   stopHubConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
       this.hubConnection.stop().catch(err => {
-        console.log(err);
+        console.error(err);
       })
     }
   }

@@ -24,7 +24,6 @@ export class Messages implements OnInit {
     this.messageService.getMessages().subscribe({
 
       next: messages => {
-        console.log(messages);
         this.r.set(messages);
       },
     });

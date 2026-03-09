@@ -44,8 +44,6 @@ export class MemberProfile implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(this.editableMember)
-
     const updatedMember = {...this.memberService.member(), ...this.editableMember};
     this.memberService.updateMember(this.editableMember).subscribe({
       next: () => {

@@ -37,7 +37,7 @@ export class MemberImages implements OnInit{
         this.images.update(photos => [...photos, photo]);
       },
       error: error => {
-        console.log('Error uploading image: ', error);
+        console.error('Error uploading image: ', error);
       }
     })
   }

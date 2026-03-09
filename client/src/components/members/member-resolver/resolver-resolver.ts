@@ -4,7 +4,7 @@ import {inject} from '@angular/core';
 import {IMember} from '../../../interfaces/member';
 import {EMPTY} from 'rxjs';
 
-export const resolverResolver: ResolveFn<IMember> = (route, state) => {
+export const resolverResolver: ResolveFn<IMember> = (route, _state) => {
   const memberService = inject(MemberService);
   const router = inject(Router);
   const id = route.paramMap.get('id');

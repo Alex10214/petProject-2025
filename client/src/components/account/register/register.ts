@@ -38,10 +38,10 @@ export class Register implements OnInit{
     if (this.registerForm.invalid) return;
 
     this.accountService.register(this.registerForm.value).subscribe({
-      next: response => {
+      next: () => {
         this.cancel();
       },
-      error: err => console.log(err),
+      error: err => console.error(err),
     });
   }
 

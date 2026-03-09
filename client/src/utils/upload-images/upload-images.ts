@@ -30,7 +30,6 @@ export class UploadImages {
   }
 
   onUploadFile() {
-    console.log(111);
     if (this.fileToUpload) {
       this.uploadFile.emit(this.fileToUpload);
     }

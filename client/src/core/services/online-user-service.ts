@@ -47,7 +47,7 @@ export class OnlineUserService {
   stopHubConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
       this.hubConnection.stop().catch(err => {
-        console.log(err);
+        console.error(err);
       })
     }
   }

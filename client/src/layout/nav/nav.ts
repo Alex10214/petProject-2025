@@ -4,6 +4,7 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 import {AccountService} from '../../core/services/account-service';
 import {ToastService} from '../../core/services/toast-service';
+import {ILoginCred} from '../../interfaces/user';
 
 @Component({
   selector: 'app-nav',
@@ -15,18 +16,16 @@ export class Nav {
   private router = inject(Router);
   protected accountService = inject(AccountService);
   private toastService = inject(ToastService);
-  protected cred: any = {}
+  protected cred: ILoginCred = { email: '', password: '' };
 
   login() {
     this.accountService.login(this.cred).subscribe({
-      next: response => {
-        console.log(response)
+      next: () => {
         this.router.navigateByUrl("/members");
         this.toastService.success("Login successful");
-        this.cred = {};
+        this.cred = { email: '', password: '' };
       },
       error: er => {
-        console.log(er)
         this.toastService.error(er.error);
       }
     });
