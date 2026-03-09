@@ -23,9 +23,9 @@ namespace API.Data
         /// <summary>
         /// Retrieves all members from the data store.
         /// </summary>
-        public async Task<IReadOnlyList<Member>> GetMembersAsync()
+        public async Task<IReadOnlyList<Member>> GetMembersAsync(string currentUserId)
         {
-            return await context.Members.ToListAsync();
+            return await context.Members.Where(m => m.Id != currentUserId).ToListAsync();
         }
 
         /// <summary>

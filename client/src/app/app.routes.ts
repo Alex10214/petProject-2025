@@ -7,7 +7,6 @@ import {Messages} from '../components/messages/messages';
 import {Home} from '../components/home/home';
 import {NotFound} from '../components/not-found/not-found';
 import {MemberProfile} from '../components/members/member-profile/member-profile';
-import {MemberMessages} from '../components/members/member-messages/member-messages';
 import {MemberImages} from '../components/members/member-images/member-images';
 import {resolverResolver} from '../components/members/member-resolver/resolver-resolver';
 import {MessageThread} from '../components/message-thread/message-thread';
@@ -27,7 +26,6 @@ export const routes: Routes = [
         children: [
           { path: '', redirectTo: 'profile', pathMatch: 'full' },
           { path: 'profile', component: MemberProfile, title: 'Profile' },
-          { path: 'messages', component: MemberMessages, title: 'Messages' },
           { path: 'images', component: MemberImages, title: 'Images' },
         ]
       },

@@ -6,7 +6,7 @@ namespace API.Interfaces
     {
         void Update(Member member);
         Task<bool> SaveAllAsync();
-        Task<IReadOnlyList<Member>> GetMembersAsync();
+        Task<IReadOnlyList<Member>> GetMembersAsync(string currentUserId);
         Task<Member?> GetMemberByIDAsync(string id);
         Task<IReadOnlyList<Image>> GetImageAsync(string id);
 

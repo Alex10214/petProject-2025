@@ -18,7 +18,7 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
         {
 
-            return Ok(await memberRepository.GetMembersAsync());
+            return Ok(await memberRepository.GetMembersAsync(User.GetMemberId()));
         }
 
         /// <summary>

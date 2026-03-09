@@ -9,4 +9,5 @@ export interface IMessage {
   content: string;
   dateRead?: string;
   messageSent: string;
+  currentUserSender?: boolean;
 }

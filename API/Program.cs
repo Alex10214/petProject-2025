@@ -78,6 +78,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<OnlineUserHub>("/hubs/online");
+app.MapHub<MessageHub>("/hubs/message");
 
 using var scope = app.Services.CreateScope();
 

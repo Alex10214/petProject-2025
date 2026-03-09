@@ -16,7 +16,6 @@ export class Messages implements OnInit {
   public r = signal<IMessage[]>([]);
   private accountService = inject(AccountService);
 
-
   ngOnInit() {
     this.loadMessages();
   }

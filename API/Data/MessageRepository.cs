@@ -17,22 +17,6 @@ namespace API.Data
         }
 
         /// <summary>
-        /// Delete a message from the database.
-        /// </summary>
-        public void DeleteMessage(Message message)
-        {
-            context.Messages.Remove(message);
-        }
-
-        /// <summary>
-        /// Returns a single message by its ID.
-        /// </summary>
-        public async Task<Message?> GetMessage(string messageID)
-        {
-            return await context.Messages.FindAsync(messageID);
-        }
-
-        /// <summary>
         /// Returns the inbox for a user - one latest message per conversation, sorted by date.
         /// </summary>
         public async Task<IEnumerable<MessageDTO>> GetMessagesForMember(string userId)

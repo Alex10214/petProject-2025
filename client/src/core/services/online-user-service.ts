@@ -3,12 +3,15 @@ import {environment} from '../../environments/environment';
 import {ToastService} from './toast-service';
 import {IUser} from '../../interfaces/user';
 import {HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsoft/signalr';
+import {Router} from '@angular/router';
+import {IMessage} from '../../interfaces/message';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OnlineUserService {
   private toast = inject(ToastService);
+  private router = inject(Router);
   hubConnection?: HubConnection;
   onlineUsers = signal<string[]>([]);
 
@@ -32,6 +35,12 @@ export class OnlineUserService {
 
     this.hubConnection.on('GetOnlineUsers', userIds => {
       this.onlineUsers.set(userIds);
+    })
+
+    this.hubConnection.on('NewMessageNotification', (message: IMessage) => {
+      if (!this.router.url.includes(`/messages/${message.senderID}`)) {
+        this.toast.info(`New message from ${message.senderDisplayName}`);
+      }
     })
   }
 
