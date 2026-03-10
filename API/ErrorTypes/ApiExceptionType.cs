@@ -1,6 +1,6 @@
-﻿namespace API.ErrorTypes
+namespace API.ErrorTypes
 {
-    public class ApiExeptionType(string message, int statusCode, string details)
+    public class ApiExceptionType(string message, int statusCode, string details)
     {
         public string Message { get; set; } = message;
         public int StatusCode { get; set; } = statusCode;

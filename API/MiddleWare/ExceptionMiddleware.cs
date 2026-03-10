@@ -1,12 +1,12 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
 using API.ErrorTypes;
 
 namespace API.MiddleWare
 {
-    public class ExeptionMiddleWare(
+    public class ExceptionMiddleware(
         RequestDelegate next,
-        ILogger<ExeptionMiddleWare> logger,
+        ILogger<ExceptionMiddleware> logger,
         IHostEnvironment env)
     {
         public async Task InvokeAsync(HttpContext context)
@@ -22,8 +22,8 @@ namespace API.MiddleWare
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = env.IsDevelopment()
-                    ? new ApiExeptionType(ex.Message, context.Response.StatusCode,  ex.StackTrace!)
-                    : new ApiExeptionType(ex.Message, context.Response.StatusCode, "Internal server error");
+                    ? new ApiExceptionType(ex.Message, context.Response.StatusCode,  ex.StackTrace!)
+                    : new ApiExceptionType(ex.Message, context.Response.StatusCode, "Internal server error");
 
                 var options = new JsonSerializerOptions
                 {

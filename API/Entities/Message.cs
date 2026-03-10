@@ -7,7 +7,7 @@
         public DateTime? DateRead { get; set; }
         public DateTime MessageSent { get; set; } = DateTime.UtcNow;
         public bool SenderDeleted { get; set; }
-        public bool RecipiendDeleted { get; set; }
+        public bool RecipientDeleted { get; set; }
 
         // nav property
         public required string SenderID { get; set; } = null!;

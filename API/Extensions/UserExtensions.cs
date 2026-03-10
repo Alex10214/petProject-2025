@@ -2,7 +2,7 @@
 using API.Entities;
 using API.Interfaces;
 
-namespace API.Extentions
+namespace API.Extensions
 {
     public static class UserExtensions
     {
@@ -12,8 +12,8 @@ namespace API.Extentions
             {
                 Id = user.Id,
                 Email = user.Email!,
-                DisplayName = user.DisplayName,
-                ImageUrl = user.ImageUrl,  
+                DisplayName = user.Member?.DisplayName ?? string.Empty,
+                ImageUrl = user.Member?.ImageUrl,
                 Token = tokenService.CreateToken(user)
             };
         }

@@ -2,7 +2,7 @@
   <h2 class="text-2xl font-semibold text-white mb-6">Messages</h2>
 
   <div class="flex flex-col gap-3">
-    @for (message of r(); track message.id) {
+    @for (message of messages(); track message.id) {
       <div
         class="flex items-start gap-4 bg-base-200 rounded-xl p-4 hover:bg-base-300 transition cursor-pointer"
         [routerLink]="['/messages', getInterlocutorId(message)]"

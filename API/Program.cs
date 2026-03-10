@@ -66,7 +66,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 var app = builder.Build();
-app.UseMiddleware<API.MiddleWare.ExeptionMiddleWare>();
+app.UseMiddleware<API.MiddleWare.ExceptionMiddleware>();
 app.UseCors(options => options
 .AllowAnyHeader()
 .AllowAnyMethod()

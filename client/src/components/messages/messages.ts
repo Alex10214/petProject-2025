@@ -14,7 +14,7 @@ import {RouterLink} from '@angular/router';
 })
 export class Messages implements OnInit {
   private messageService = inject(MessageService);
-  public r = signal<IMessage[]>([]);
+  protected messages = signal<IMessage[]>([]);
   private accountService = inject(AccountService);
 
   ngOnInit() {
@@ -25,7 +25,7 @@ export class Messages implements OnInit {
     this.messageService.getMessages().subscribe({
 
       next: messages => {
-        this.r.set(messages);
+        this.messages.set(messages);
       },
     });
   }

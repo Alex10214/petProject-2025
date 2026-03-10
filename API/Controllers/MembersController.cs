@@ -64,7 +64,6 @@ namespace API.Controllers
             member.City = updatedMember.City ?? member.City;
             member.Country = updatedMember.Country ?? member.Country;
             member.ImageUrl = updatedMember.ImageUrl ?? member.ImageUrl;
-            member.User.DisplayName = updatedMember.DisplayName ?? member.User.DisplayName;
 
             memberRepository.Update(member);
 
@@ -94,7 +93,6 @@ namespace API.Controllers
             if (member.ImageUrl == null)
             {
                 member.ImageUrl = image.Url;
-                member.User.ImageUrl = image.Url;
             }
 
             member.Images.Add(image);
@@ -118,10 +116,9 @@ namespace API.Controllers
 
             var image = member.Images.SingleOrDefault(i => i.Id == imageId);
 
-            if (member.ImageUrl == image?.Url || image == null) return BadRequest("Connot set image");
+            if (member.ImageUrl == image?.Url || image == null) return BadRequest("Cannot set image");
 
             member.ImageUrl = image.Url;
-            member.User.ImageUrl = image.Url;
 
             if (await memberRepository.SaveAllAsync()) return NoContent();
 
@@ -140,7 +137,7 @@ namespace API.Controllers
 
             if (image == null) return BadRequest("Could not get image");
 
-            if (image.PublicID == null)
+            if (image.PublicID != null)
             {
                 var res = await imageService.DeleteImageAsync(image.PublicID!);
 
@@ -153,7 +150,6 @@ namespace API.Controllers
             if (member.ImageUrl == image.Url)
             {
                 member.ImageUrl = null;
-                member.User.ImageUrl = null;
             }
 
             if (await memberRepository.SaveAllAsync()) return Ok();

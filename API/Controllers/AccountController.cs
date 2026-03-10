@@ -1,6 +1,6 @@
 ﻿using API.DTO;
 using API.Entities;
-using API.Extentions;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,6 @@ namespace API.Controllers
             var user = new User
             {
                 Email = registerDTO.Email,
-                DisplayName = registerDTO.DisplayName,
                 UserName = registerDTO.Email,
                 Member = new Member
                 {
@@ -57,7 +56,7 @@ namespace API.Controllers
         [HttpPost("login")] // /api/account/login
         public async Task<ActionResult<UserDTO>> Login([FromBody]LoginDTO loginDTO)
         {
-            var user = await userManager.FindByEmailAsync(loginDTO.Email);
+            var user = await userManager.Users.Include(u => u.Member).FirstOrDefaultAsync(u => u.Email == loginDTO.Email);
 
             if (user == null) return Unauthorized("Invalid email or password");
 
@@ -83,7 +82,7 @@ namespace API.Controllers
 
             if (refreshToken == null) return NoContent();
 
-            var user = await userManager.Users.FirstOrDefaultAsync(i => i.RefreshToken == refreshToken && i.RefreshTokenExp > DateTime.UtcNow);
+            var user = await userManager.Users.Include(u => u.Member).FirstOrDefaultAsync(i => i.RefreshToken == refreshToken && i.RefreshTokenExp > DateTime.UtcNow);
 
             if (user == null) return Unauthorized();
 
