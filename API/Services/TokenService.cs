@@ -12,7 +12,7 @@ namespace API.Services
     {
         public string CreateToken(User user)
         {
-            var tokenKey = configuration["tokenKey"]
+            var tokenKey = configuration["TokenKey"]
                 ?? throw new Exception("Cannot get token key");
 
             if (tokenKey.Length < 64)

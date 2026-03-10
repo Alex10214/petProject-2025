@@ -80,7 +80,7 @@ namespace API.Controllers
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
-            if (refreshToken == null) return NoContent();
+            if (refreshToken == null) return Unauthorized();
 
             var user = await userManager.Users.Include(u => u.Member).FirstOrDefaultAsync(i => i.RefreshToken == refreshToken && i.RefreshTokenExp > DateTime.UtcNow);
 
