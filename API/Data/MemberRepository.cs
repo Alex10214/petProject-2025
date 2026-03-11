@@ -59,7 +59,6 @@ namespace API.Data
         public async Task<Member?> GetMemberForUpdates(string id)
         {
             return await context.Members
-                .Include(m => m.User)
                 .Include(m => m.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
