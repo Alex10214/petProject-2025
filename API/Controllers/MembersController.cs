@@ -1,4 +1,4 @@
-﻿using API.DTO;
+using API.DTO;
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
@@ -15,10 +15,10 @@ namespace API.Controllers
         /// </summary>
         /// <returns>List of members.</returns>
         [HttpGet] // localhost:7281/api/members
-        public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
+        public async Task<ActionResult<IReadOnlyList<MemberDTO>>> GetMembers()
         {
-
-            return Ok(await memberRepository.GetMembersAsync(User.GetMemberId()));
+            var members = await memberRepository.GetMembersAsync(User.GetMemberId());
+            return Ok(members.Select(m => m.ToDto()));
         }
 
         /// <summary>
@@ -28,13 +28,13 @@ namespace API.Controllers
         /// <returns>Member details.</returns>
         [Authorize]
         [HttpGet("{id}")] // localhost:7281/api/members/3
-        public async Task<ActionResult<Member>> GetMember(string id)
+        public async Task<ActionResult<MemberDTO>> GetMember(string id)
         {
             var member = await memberRepository.GetMemberByIDAsync(id);
 
             if (member == null) return NotFound();
 
-            return member;
+            return member.ToDto();
         }
 
         /// <summary>
@@ -44,10 +44,10 @@ namespace API.Controllers
         /// <returns>List of member images.</returns>
         [Authorize]
         [HttpGet("{id}/images")] // localhost:7281/api/members/3/images
-        public async Task<ActionResult<IReadOnlyList<Image>>> GetMembersImages(string id)
+        public async Task<ActionResult<IReadOnlyList<ImageDTO>>> GetMembersImages(string id)
         {
-            return Ok(await memberRepository.GetImageAsync(id));
-
+            var images = await memberRepository.GetImageAsync(id);
+            return Ok(images.Select(i => i.ToDto()));
         }
 
         [HttpPut]
@@ -73,13 +73,14 @@ namespace API.Controllers
         }
 
         [HttpPost("upload-image")]
-        public async Task<ActionResult<Image>> UploadImage([FromForm] IFormFile file)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ImageDTO>> UploadImage([FromForm] UploadImageDTO dto)
         {
             var member = await memberRepository.GetMemberForUpdates(User.GetMemberId());
 
             if (member == null) return BadRequest("Could not get member");
 
-            var result = await imageService.UploadImageAsync(file);
+            var result = await imageService.UploadImageAsync(dto.File);
 
             if (result.Error != null) return BadRequest(result.Error.Message);
 
@@ -99,7 +100,7 @@ namespace API.Controllers
 
             if (await memberRepository.SaveAllAsync())
             {
-                return Ok(image);
+                return Ok(image.ToDto());
             }
             else
             {
@@ -116,14 +117,14 @@ namespace API.Controllers
 
             var image = member.Images.SingleOrDefault(i => i.Id == imageId);
 
-            if (member.ImageUrl == image?.Url || image == null) return BadRequest("Cannot set image");
+            if (image == null) return BadRequest("Cannot set image");
+            if (member.ImageUrl == image.Url) return BadRequest("Image is already set");
 
             member.ImageUrl = image.Url;
 
             if (await memberRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("Something went wrong");
-
         }
 
         [HttpDelete("delete-image/{id}")]
@@ -142,7 +143,6 @@ namespace API.Controllers
                 var res = await imageService.DeleteImageAsync(image.PublicID!);
 
                 if (res.Error != null) return BadRequest("Something went wrong");
-
             }
 
             member.Images.Remove(image);
