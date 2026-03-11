@@ -1,8 +1,9 @@
 import {ResolveFn, Router} from '@angular/router';
-import {MemberService} from '../../../core/services/member-service';
 import {inject} from '@angular/core';
-import {IMember} from '../../../interfaces/member';
 import {EMPTY} from 'rxjs';
+
+import {MemberService} from '../../../core/services/member-service';
+import {IMember} from '../../../interfaces/member';
 
 export const resolverResolver: ResolveFn<IMember> = (route, _state) => {
   const memberService = inject(MemberService);

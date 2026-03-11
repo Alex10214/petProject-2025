@@ -1,8 +1,9 @@
 import {Component, inject} from '@angular/core';
-import {MemberService} from '../../../core/services/member-service';
 import {Observable} from 'rxjs';
-import {IMember} from '../../../interfaces/member';
 import {AsyncPipe} from '@angular/common';
+
+import {MemberService} from '../../../core/services/member-service';
+import {IMember} from '../../../interfaces/member';
 import {MemberCard} from '../member-card/member-card';
 
 @Component({

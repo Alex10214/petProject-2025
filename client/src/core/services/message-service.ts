@@ -1,9 +1,10 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
+import {HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsoft/signalr';
+
+import {environment} from '../../environments/environment';
 import {IMessage} from '../../interfaces/message';
 import {AccountService} from './account-service';
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root',

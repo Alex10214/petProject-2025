@@ -1,9 +1,9 @@
 import {Component, inject, OnDestroy, OnInit, signal, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
+import {FormsModule, NgForm} from '@angular/forms';
 
 import {IEditMember, IMember} from '../../../interfaces/member';
 import {MemberService} from '../../../core/services/member-service';
-import {FormsModule, NgForm} from '@angular/forms';
 import {ToastService} from '../../../core/services/toast-service';
 import {AccountService} from '../../../core/services/account-service';
 

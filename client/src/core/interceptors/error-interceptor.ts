@@ -1,9 +1,9 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import {catchError} from 'rxjs';
 import {inject} from '@angular/core';
+import {Router} from '@angular/router';
 
 import {ToastService} from '../services/toast-service';
-import {Router} from '@angular/router';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);

@@ -1,11 +1,11 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs';
+import {HubConnectionState} from '@microsoft/signalr';
 
+import {OnlineUserService} from './online-user-service';
 import {ILoginCred, IRegisterCred, IUser} from '../../interfaces/user';
 import {environment} from '../../environments/environment';
-import {OnlineUserService} from './online-user-service';
-import {HubConnectionState} from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root',

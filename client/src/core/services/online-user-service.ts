@@ -1,9 +1,10 @@
 import {inject, Injectable, signal} from '@angular/core';
+import {HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsoft/signalr';
+import {Router} from '@angular/router';
+
 import {environment} from '../../environments/environment';
 import {ToastService} from './toast-service';
 import {IUser} from '../../interfaces/user';
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from '@microsoft/signalr';
-import {Router} from '@angular/router';
 import {IMessage} from '../../interfaces/message';
 
 @Injectable({
