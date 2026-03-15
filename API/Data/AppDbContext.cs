@@ -15,6 +15,10 @@ namespace API.Data
         public DbSet<Image> Image { get; set; }
         public DbSet<Message> Messages { get; set; }
 
+        /// <summary>
+        /// Configures entity relationships and database schema rules.
+        /// Called once at startup by EF Core to build the in-memory model.
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

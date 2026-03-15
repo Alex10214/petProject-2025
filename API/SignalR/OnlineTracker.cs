@@ -2,6 +2,13 @@
 
 namespace API.SignalR
 {
+    /// <summary>
+    /// Tracks online users and their active SignalR connections.
+    /// A user can have multiple connections (e.g. multiple devices/tabs).
+    /// The user is considered offline only when all connections are removed.
+    /// Uses ConcurrentDictionary for thread-safe access.
+    /// Structure: UserId -> { ConnectionId -> byte (placeholder) }
+    /// </summary>
     public class OnlineTracker
     {
         private static readonly ConcurrentDictionary<string,

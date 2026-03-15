@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(opt =>
 });
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddCors();
@@ -101,6 +101,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors(options => options
 .AllowAnyHeader()
 .AllowAnyMethod()
@@ -113,6 +117,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<OnlineUserHub>("/hubs/online");
 app.MapHub<MessageHub>("/hubs/message");
+app.MapFallbackToFile("index.html");
 
 using var scope = app.Services.CreateScope();
 

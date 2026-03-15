@@ -8,6 +8,15 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace API.SignalR
 {
+    /// <summary>
+    /// SignalR Hub for real-time messaging between users.
+    /// OnConnectedAsync — called automatically when a client opens a chat with another user.
+    ///   Groups both users together and sends the message history to the group.
+    /// SendMessage — called by the client to send a new message.
+    ///   Saves the message to the DB, sends it to the chat group,
+    ///   and sends a notification via OnlineUserHub if the recipient is not in the chat.
+    /// GetGroupName — always produces the same group name regardless of who opened the chat first.
+    /// </summary>
     [Authorize]
     public class MessageHub(IMessageRepository messageRepository, IMemberRepository memberRepository, IHubContext<OnlineUserHub> onlineUserHubContext) : Hub
     {

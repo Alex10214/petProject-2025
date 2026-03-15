@@ -8,6 +8,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services
 {
+    /// <summary>
+    /// Handles JWT access token creation and refresh token generation.
+    /// Access token expires in 5 minutes and contains user email and id as claims.
+    /// Refresh token is a random 64-byte string stored in the database used to issue new access tokens.
+    /// </summary>
     public class TokenService(IConfiguration configuration) : ITokenService
     {
         public string CreateToken(User user)
