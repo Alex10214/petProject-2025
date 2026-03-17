@@ -72,6 +72,7 @@ namespace API.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Delete("isLoggedIn");
             return NoContent();
         }
 
@@ -108,6 +109,14 @@ namespace API.Controllers
             };
 
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+
+            Response.Cookies.Append("isLoggedIn", "true", new CookieOptions
+            {
+                HttpOnly = false,
+                Secure = false,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(1)
+            });
         }
     }
 }

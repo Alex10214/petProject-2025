@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
 
@@ -13,21 +13,12 @@ import {AccountService} from '../../core/services/account-service';
   styleUrl: './messages.css',
 })
 export class Messages implements OnInit {
-  private messageService = inject(MessageService);
-  protected messages = signal<IMessage[]>([]);
+  protected messageService = inject(MessageService);
+  protected messages = this.messageService.messages;
   private accountService = inject(AccountService);
 
   ngOnInit() {
-    this.loadMessages();
-  }
-
-  loadMessages() {
-    this.messageService.getMessages().subscribe({
-
-      next: messages => {
-        this.messages.set(messages);
-      },
-    });
+    this.messageService.loadMessages();
   }
 
   getInterlocutorId(message: IMessage): string {

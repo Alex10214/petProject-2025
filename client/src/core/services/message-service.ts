@@ -16,9 +16,20 @@ export class MessageService {
   private hubUrl = environment.hubUrl;
   private hubConnection?: HubConnection;
   messageThread = signal<IMessage[]>([]);
+  messages = signal<IMessage[]>([]);
 
   getMessages() {
     return this.httpClient.get<IMessage[]>(this.baseUrl + 'message');
+  }
+
+  loadMessages() {
+    const currentUser = this.accountService.currentUser();
+    this.getMessages().subscribe({
+      next: messages => {
+        messages.forEach(m => m.currentUserSender = currentUser?.id === m.senderID);
+        this.messages.set(messages);
+      },
+    });
   }
 
   getMessageThread(id: string) {
@@ -48,6 +59,14 @@ export class MessageService {
     this.hubConnection.on('ReceiveMessagesThread', (messages: IMessage[]) => {
       messages.forEach(m => m.currentUserSender = currentUser.id === m.senderID);
       this.messageThread.set(messages);
+
+      this.messages.update(inbox =>
+        inbox.map(m =>
+          m.senderID === otherUserId && !m.dateRead
+            ? { ...m, dateRead: new Date().toISOString() }
+            : m
+        )
+      );
     })
   }
 
