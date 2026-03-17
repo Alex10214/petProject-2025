@@ -76,7 +76,24 @@
           formControlName="password"
           placeholder="Password"
         >
+        @if (registerForm.controls['password'].touched) {
+          @if (registerForm.controls['password'].hasError('required')) {
+            <span class="text-error text-sm">Password is required</span>
+          } @else if (registerForm.controls['password'].hasError('minlength')) {
+            <span class="text-error text-sm">Password must be at least 4 characters</span>
+          } @else if (registerForm.controls['password'].hasError('maxlength')) {
+            <span class="text-error text-sm">Password must be at most 10 characters</span>
+          }
+        }
       </label>
+
+      @if (validationErrors().length > 0) {
+        <div class="alert alert-error flex flex-col items-start gap-1 p-3">
+          @for (error of validationErrors(); track error) {
+            <span class="text-sm">{{ error }}</span>
+          }
+        </div>
+      }
 
       <div class="flex items-center justify-end gap-3"></div>
       <button [disabled]="!registerForm.valid" class="btn btn-primary" type="submit">Register</button>

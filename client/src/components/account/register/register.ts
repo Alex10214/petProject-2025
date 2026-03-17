@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, output} from '@angular/core';
+import {Component, inject, OnInit, output, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 import {AccountService} from '../../../core/services/account-service';
@@ -34,14 +34,20 @@ export class Register implements OnInit{
     return new Date().toISOString().split('T')[0];
   }
 
-  register() {
-    if (this.registerForm.invalid) return;
+  validationErrors = signal<string[]>([]);
 
+  register() {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    this.validationErrors.set([]);
     this.accountService.register(this.registerForm.value).subscribe({
       next: () => {
         this.cancel();
       },
-      error: err => console.error(err),
+      error: (err: string[]) => this.validationErrors.set(err),
     });
   }
 

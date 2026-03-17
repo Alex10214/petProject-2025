@@ -63,7 +63,7 @@ export class AccountService {
           this.logout()
         }
       });
-    }, 1000 * 60 * 5)
+    }, 1000 * 60 * 60 * 5)
   }
 
  logout() {

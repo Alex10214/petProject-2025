@@ -25,7 +25,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           }
           break;
         case 401:
-          toastService.error('Unauthorized');
           break;
         case 403:
           toastService.error('Access denied');
