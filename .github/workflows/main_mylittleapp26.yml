@@ -67,4 +67,4 @@ jobs:
           app-name: 'myLittleApp26'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DE4D2821D9944877A3F62BC2C50F6282 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DE4D2B21D9944877A3F62BC2C50F6282 }}
