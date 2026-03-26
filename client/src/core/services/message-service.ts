@@ -32,10 +32,6 @@ export class MessageService {
     });
   }
 
-  getMessageThread(id: string) {
-    return this.httpClient.get<IMessage[]>(this.baseUrl + `message/thread/${id}`);
-  }
-
   sendMessage(recipientId: string, content: string) {
     return this.hubConnection?.invoke("SendMessage", { RecipientID: recipientId, Content: content });
   }
