@@ -8,8 +8,6 @@
         public DateTime MessageSent { get; set; } = DateTime.UtcNow;
         public bool SenderDeleted { get; set; }
         public bool RecipientDeleted { get; set; }
-
-        // nav property
         public required string SenderID { get; set; } = null!;
         public Member Sender { get; set; } = null!;
         public string RecipientID { get; set; } = null!;

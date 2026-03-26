@@ -1,5 +1,4 @@
-﻿using API.DTO;
-using API.Entities;
+﻿using API.Entities;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,7 @@ namespace API.Data
         /// </summary>
         /// <param name="memberID">Member identifier.</param>
         /// <returns>Read-only list of member images.</returns>
-        public async Task<IReadOnlyList<Image>> GetImageAsync(string memberID)
+        public async Task<IReadOnlyList<Image>> GetImagesAsync(string memberID)
         {
             return await context.Members
                 .Where(m => m.Id == memberID)
@@ -25,7 +24,9 @@ namespace API.Data
         /// </summary>
         public async Task<IReadOnlyList<Member>> GetMembersAsync(string currentUserId)
         {
-            return await context.Members.Where(m => m.Id != currentUserId).ToListAsync();
+            return await context.Members
+                .Where(m => m.Id != currentUserId)
+                .ToListAsync();
         }
 
         /// <summary>
@@ -56,6 +57,11 @@ namespace API.Data
             context.Entry(member).State = EntityState.Modified;
         }
 
+        /// <summary>
+        /// Retrieves a member with images included, intended for update operations.
+        /// </summary>
+        /// <param name="id">Member identifier.</param>
+        /// <returns>Member entity with images or null if not found.</returns>
         public async Task<Member?> GetMemberForUpdates(string id)
         {
             return await context.Members

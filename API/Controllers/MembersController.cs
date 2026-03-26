@@ -46,16 +46,19 @@ namespace API.Controllers
         [HttpGet("{id}/images")] // localhost:7281/api/members/3/images
         public async Task<ActionResult<IReadOnlyList<ImageDTO>>> GetMembersImages(string id)
         {
-            var images = await memberRepository.GetImageAsync(id);
+            var images = await memberRepository.GetImagesAsync(id);
             return Ok(images.Select(i => i.ToDto()));
         }
 
+        /// <summary>
+        /// Updates the current member's profile information.
+        /// </summary>
+        /// <param name="updatedMember">Updated member data.</param>
+        /// <returns>No content on success.</returns>
         [HttpPut]
         public async Task<ActionResult> UpdateMember(MemberUpdateDTO updatedMember)
         {
-            var existingMember = User.GetMemberId();
-
-            var member = await memberRepository.GetMemberForUpdates(existingMember);
+            var member = await memberRepository.GetMemberForUpdates(User.GetMemberId());
 
             if (member == null) return BadRequest("Could not get member");
 
@@ -72,6 +75,11 @@ namespace API.Controllers
             return BadRequest("Failed to update member");
         }
 
+        /// <summary>
+        /// Uploads a new image for the current member.
+        /// </summary>
+        /// <param name="dto">Form data containing the image file.</param>
+        /// <returns>Uploaded image details.</returns>
         [HttpPost("upload-image")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<ImageDTO>> UploadImage([FromForm] UploadImageDTO dto)
@@ -98,16 +106,16 @@ namespace API.Controllers
 
             member.Images.Add(image);
 
-            if (await memberRepository.SaveAllAsync())
-            {
-                return Ok(image.ToDto());
-            }
-            else
-            {
-                return BadRequest("Problem adding image");
-            }
+            if (await memberRepository.SaveAllAsync()) return Ok(image.ToDto());
+
+            return BadRequest("Problem adding image");
         }
 
+        /// <summary>
+        /// Sets the specified image as the member's main profile image.
+        /// </summary>
+        /// <param name="imageId">Image identifier.</param>
+        /// <returns>No content on success.</returns>
         [HttpPut("set-main-image/{imageId}")]
         public async Task<ActionResult> SetMainImage(int imageId)
         {
@@ -127,6 +135,11 @@ namespace API.Controllers
             return BadRequest("Something went wrong");
         }
 
+        /// <summary>
+        /// Deletes the specified image from the member's profile.
+        /// </summary>
+        /// <param name="id">Image identifier.</param>
+        /// <returns>Ok on success.</returns>
         [HttpDelete("delete-image/{id}")]
         public async Task<ActionResult> DeleteImage(int id)
         {

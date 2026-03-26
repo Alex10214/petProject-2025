@@ -92,7 +92,6 @@ namespace API.Controllers
             return user.ToDto(tokenService);
         }
 
-
         private async Task SetRefreshToken(User user)
         {
             var refreshToken = tokenService.GenerateRefreshToken();

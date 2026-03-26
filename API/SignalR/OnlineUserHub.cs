@@ -9,7 +9,7 @@ namespace API.SignalR
     /// OnConnectedAsync — called automatically by SignalR when a client connects.
     ///   Registers the connection, notifies all clients, sends online list to the caller.
     /// OnDisconnectedAsync — called automatically by SignalR when a client disconnects.
-    ///   Removes the connection, notifies others, sends updated online list to the caller.
+    ///   Removes the connection, notifies others that the user is offline.
     /// Requires authorization — only authenticated users can connect.
     /// </summary>
     [Authorize]
@@ -27,13 +27,9 @@ namespace API.SignalR
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-
             await onlineTracker.UserDisconnected(GetUserId(), Context.ConnectionId);
 
             await Clients.Others.SendAsync("UserIsOffline", GetUserId());
-
-            var currentUsers = await onlineTracker.GetOnlineUsers();
-            await Clients.Caller.SendAsync("GetOnlineUsers", currentUsers);
         }
 
         private string GetUserId() => Context.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;

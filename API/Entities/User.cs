@@ -8,6 +8,5 @@ namespace API.Entities
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExp { get; set; }
         public Member Member { get; set; } = null!;
-        
     }
 }

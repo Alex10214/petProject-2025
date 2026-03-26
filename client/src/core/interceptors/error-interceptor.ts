@@ -4,10 +4,12 @@ import {inject} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {ToastService} from '../services/toast-service';
+import {AccountService} from '../services/account-service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
   const router = inject(Router);
+  const accountService = inject(AccountService);
   return next(req).pipe(
     catchError(error => {
       switch (error.status) {
@@ -25,6 +27,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           }
           break;
         case 401:
+          if (!req.url.includes('refresh-token')) {
+            accountService.logout();
+            router.navigate(['/login']);
+          }
           break;
         case 403:
           toastService.error('Access denied');

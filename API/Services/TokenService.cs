@@ -10,7 +10,7 @@ namespace API.Services
 {
     /// <summary>
     /// Handles JWT access token creation and refresh token generation.
-    /// Access token expires in 5 minutes and contains user email and id as claims.
+    /// Access token expires in 4 hours and contains user email and id as claims.
     /// Refresh token is a random 64-byte string stored in the database used to issue new access tokens.
     /// </summary>
     public class TokenService(IConfiguration configuration) : ITokenService
@@ -39,7 +39,7 @@ namespace API.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddHours(4),
                 SigningCredentials = creds
             };
 
